@@ -28,9 +28,19 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+            <div class="flex">
+
+                @include('partials.sidebar')
+
+                <div class="flex-1 ml-64">
+
+                    <main class="p-6">
+                        {{ $slot }}
+                    </main>
+
+                </div>
+
+            </div>
         </div>
     </body>
 </html>
