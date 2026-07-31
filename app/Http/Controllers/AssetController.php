@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Supplier;
@@ -148,5 +149,16 @@ class AssetController extends Controller
         return redirect()
             ->route('assets.index')
             ->with('success', 'Asset deleted successfully.');
+    }
+
+    public function exportPdf()
+    {
+        $assets = Asset::with(['category', 'supplier'])
+            ->orderBy('asset_name')
+            ->get();
+
+        $pdf = Pdf::loadView('assets.pdf', compact('assets'));
+
+        return $pdf->download('assets-report.pdf');
     }
 }
