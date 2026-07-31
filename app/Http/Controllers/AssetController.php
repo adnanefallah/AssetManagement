@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Exports\AssetsExport;
 use App\Helpers\ActivityLogger;
 use App\Helpers\AssetHistoryLogger;
@@ -86,7 +87,16 @@ class AssetController extends Controller
             'purchase_price' => 'nullable|numeric',
             'status' => 'required',
             'location' => 'nullable',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+
+            $data['image'] = $request
+                ->file('image')
+                ->store('assets', 'public');
+
+        }
 
         $asset = Asset::create($data);
 
@@ -146,7 +156,22 @@ class AssetController extends Controller
             'purchase_price' => 'nullable|numeric',
             'status' => 'required',
             'location' => 'nullable',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+
+            if ($asset->image) {
+
+                Storage::disk('public')->delete($asset->image);
+
+            }
+
+            $data['image'] = $request
+                ->file('image')
+                ->store('assets', 'public');
+
+        }
 
         $asset->update($data);
 
@@ -183,6 +208,12 @@ class AssetController extends Controller
             'Asset Deleted',
             'Asset removed from inventory.'
         );
+
+        if ($asset->image) {
+
+            Storage::disk('public')->delete($asset->image);
+
+        }
 
         $asset->delete();
 

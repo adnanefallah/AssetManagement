@@ -143,6 +143,7 @@
 
             <tr>
 
+                <th class="border px-3 py-2">Image</th>
                 <th class="border px-3 py-2">Code</th>
                 <th class="border px-3 py-2">Name</th>
                 <th class="border px-3 py-2">Serial Number</th>
@@ -162,6 +163,26 @@
             @forelse($assets as $asset)
 
             <tr>
+
+                <td class="border px-3 py-2 text-center">
+
+                    @if($asset->image)
+
+                        <img
+                            src="{{ asset('storage/' . $asset->image) }}"
+                            alt="{{ $asset->asset_name }}"
+                            class="w-16 h-16 object-cover rounded mx-auto">
+
+                    @else
+
+                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-sm">
+                            No Image
+                        </span>
+
+                    @endif
+
+                </td>
+
 
                 <td class="border px-3 py-2">
                     {{ $asset->asset_code }}
@@ -302,7 +323,7 @@
 
             <tr>
 
-                <td colspan="9" class="text-center py-6 text-gray-500">
+                <td colspan="10" class="text-center py-6 text-gray-500">
 
                     No assets found.
 
