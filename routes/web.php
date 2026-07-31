@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\Admin\ReportController;
@@ -22,6 +23,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
     Route::get('/assets/excel', [AssetController::class, 'exportExcel'])->name('assets.excel');
     Route::resource('assets', AssetController::class);
     Route::get('/assets/pdf', [AssetController::class, 'exportPdf'])->name('assets.pdf');
