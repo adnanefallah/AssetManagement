@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AssetAssignedMail;
 use App\Models\Asset;
 use App\Models\AssetAssignment;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AssetAssignmentController extends Controller
 {
@@ -44,11 +46,16 @@ class AssetAssignmentController extends Controller
             'status' => 'required',
         ]);
 
-        AssetAssignment::create($request->all());
+        $assignment = AssetAssignment::create($request->all());
+
+        $assignment->load(['asset', 'user']);
+
+        Mail::to($assignment->user->email)
+            ->send(new AssetAssignedMail($assignment));
 
         return redirect()
             ->route('asset-assignments.index')
-            ->with('success', 'Asset assigned successfully.');
+            ->with('success', 'Asset assigned successfully. Email notification sent.');
     }
 
     /**
