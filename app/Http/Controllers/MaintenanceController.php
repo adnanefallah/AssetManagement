@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AssetHistoryLogger;
 use App\Models\Asset;
 use App\Models\Maintenance;
 use Illuminate\Http\Request;
@@ -44,7 +45,13 @@ class MaintenanceController extends Controller
             'status' => 'required',
         ]);
 
-        Maintenance::create($data);
+        $maintenance = Maintenance::create($data);
+
+        AssetHistoryLogger::log(
+            $maintenance->asset_id,
+            'Maintenance Started',
+            'Asset sent to maintenance.'
+        );
 
         return redirect()
             ->route('maintenances.index')
@@ -88,6 +95,21 @@ class MaintenanceController extends Controller
 
         $maintenance->update($data);
 
+        AssetHistoryLogger::log(
+            $maintenance->asset_id,
+            'Maintenance Updated',
+            'Maintenance information updated.'
+        );
+
+        if ($maintenance->status === 'Completed') {
+
+            AssetHistoryLogger::log(
+                $maintenance->asset_id,
+                'Maintenance Completed',
+                'Asset returned from maintenance.'
+            );
+        }
+
         return redirect()
             ->route('maintenances.index')
             ->with('success', 'Maintenance updated successfully.');
@@ -98,6 +120,12 @@ class MaintenanceController extends Controller
      */
     public function destroy(Maintenance $maintenance)
     {
+        AssetHistoryLogger::log(
+            $maintenance->asset_id,
+            'Maintenance Deleted',
+            'Maintenance record deleted.'
+        );
+
         $maintenance->delete();
 
         return redirect()
