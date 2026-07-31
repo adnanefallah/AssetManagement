@@ -20,6 +20,7 @@ class Asset extends Model
         'purchase_price',
         'status',
         'location',
+        'image',
     ];
 
     public function category()

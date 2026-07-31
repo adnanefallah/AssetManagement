@@ -6,7 +6,7 @@
 
     <div class="p-6">
 
-        <form action="{{ route('assets.store') }}" method="POST">
+        <form action="{{ route('assets.store') }}" method="POST" enctype="multipart/form-data">
 
             @csrf
 
@@ -94,6 +94,24 @@
             <div class="mb-4">
                 <label>Location</label>
                 <input type="text" name="location" class="border w-full p-2 rounded">
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 font-medium">
+                    Asset Image
+                </label>
+
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    class="border w-full p-2 rounded">
+
+                @error('image')
+                <p class="text-red-500 text-sm mt-1">
+                    {{ $message }}
+                </p>
+                @enderror
             </div>
 
             <button class="bg-green-600 text-white px-4 py-2 rounded">
