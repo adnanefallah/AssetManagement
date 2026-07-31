@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketCreatedMail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Asset;
 use App\Models\Ticket;
 use App\Models\User;
@@ -46,11 +48,16 @@ class TicketController extends Controller
             'status' => 'required',
         ]);
 
-        Ticket::create($request->all());
+        $ticket = Ticket::create($request->all());
+
+        $ticket->load(['asset', 'user']);
+
+        Mail::to($ticket->user->email)
+            ->send(new TicketCreatedMail($ticket));
 
         return redirect()
             ->route('tickets.index')
-            ->with('success', 'Ticket created successfully.');
+            ->with('success', 'Ticket created successfully. Email notification sent.');
     }
 
     /**
