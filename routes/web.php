@@ -22,6 +22,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/assets/excel', [AssetController::class, 'exportExcel'])->name('assets.excel');
+    Route::resource('assets', AssetController::class);
     Route::get('/assets/pdf', [AssetController::class, 'exportPdf'])->name('assets.pdf');
     Route::resource('assets', AssetController::class);
     Route::resource('maintenances', MaintenanceController::class);
