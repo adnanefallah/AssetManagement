@@ -16,19 +16,42 @@ class AssetController extends Controller
     {
         $query = Asset::with(['category', 'supplier']);
 
+        // Search
         if ($request->filled('search')) {
+
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
+
                 $q->where('asset_name', 'like', "%{$search}%")
                     ->orWhere('asset_code', 'like', "%{$search}%")
                     ->orWhere('serial_number', 'like', "%{$search}%");
+
             });
+        }
+
+        // Filter by Category
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Filter by Supplier
+        if ($request->filled('supplier')) {
+            $query->where('supplier_id', $request->supplier);
+        }
+
+        // Filter by Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
         $assets = $query->latest()->paginate(10);
 
-        return view('assets.index', compact('assets'));
+        return view('assets.index', [
+            'assets' => $assets,
+            'categories' => \App\Models\Category::orderBy('category_name')->get(),
+            'suppliers' => \App\Models\Supplier::orderBy('company_name')->get(),
+        ]);
     }
 
     /**
