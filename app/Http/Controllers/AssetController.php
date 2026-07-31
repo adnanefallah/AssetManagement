@@ -12,11 +12,21 @@ class AssetController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $assets = Asset::with(['category', 'supplier'])
-            ->latest()
-            ->paginate(10);
+        $query = Asset::with(['category', 'supplier']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('asset_name', 'like', "%{$search}%")
+                    ->orWhere('asset_code', 'like', "%{$search}%")
+                    ->orWhere('serial_number', 'like', "%{$search}%");
+            });
+        }
+
+        $assets = $query->latest()->paginate(10);
 
         return view('assets.index', compact('assets'));
     }
