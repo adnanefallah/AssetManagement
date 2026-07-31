@@ -149,6 +149,7 @@
                 <th class="border px-3 py-2">Category</th>
                 <th class="border px-3 py-2">Supplier</th>
                 <th class="border px-3 py-2">Status</th>
+                <th class="border px-3 py-2">Warranty</th>
                 <th class="border px-3 py-2">Location</th>
                 <th class="border px-3 py-2">Actions</th>
 
@@ -213,6 +214,42 @@
                 </td>
 
                 <td class="border px-3 py-2">
+
+                    @php
+                    $expiry = $asset->warranty_end
+                    ? \Carbon\Carbon::parse($asset->warranty_end)
+                    : null;
+                    @endphp
+
+                    @if(!$expiry)
+
+                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        No Warranty
+                    </span>
+
+                                @elseif($expiry->isPast())
+
+                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
+                        Expired
+                    </span>
+
+                                @elseif($expiry->isFuture() && now()->diffInDays($expiry) <= 30)
+
+                                <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                        Expires Soon
+                    </span>
+
+                                @else
+
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
+                        Active
+                    </span>
+
+                    @endif
+
+                </td>
+
+                <td class="border px-3 py-2">
                     {{ $asset->location }}
                 </td>
 
@@ -265,7 +302,7 @@
 
             <tr>
 
-                <td colspan="8" class="text-center py-6 text-gray-500">
+                <td colspan="9" class="text-center py-6 text-gray-500">
 
                     No assets found.
 
