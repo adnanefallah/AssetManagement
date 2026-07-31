@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -15,6 +16,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::resource('categories', CategoryController::class);
     Route::resource('departments', DepartmentController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
