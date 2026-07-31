@@ -9,12 +9,12 @@
     <div class="p-6">
 
         @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        <div class="mb-4 rounded bg-green-100 border border-green-400 px-4 py-3 text-green-700">
             {{ session('success') }}
         </div>
         @endif
 
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-6">
 
             <a href="{{ route('assets.create') }}"
                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
@@ -23,35 +23,107 @@
 
         </div>
 
-        <!-- Search Form -->
-        <form method="GET" action="{{ route('assets.index') }}" class="mb-6">
+        <!-- Search & Filters -->
+        <form action="{{ route('assets.index') }}" method="GET" class="mb-6">
 
-            <div class="flex gap-2">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
 
                 <input
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Search by name, tag or serial number..."
-                    class="border rounded px-4 py-2 w-96">
+                    placeholder="Search by name, code or serial number..."
+                    class="border rounded px-4 py-2 w-full">
 
-                <button
-                    type="submit"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    Search
-                </button>
+                <select
+                    name="category"
+                    class="border rounded px-4 py-2">
 
-                <a
-                    href="{{ route('assets.index') }}"
-                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
-                    Reset
-                </a>
+                    <option value="">All Categories</option>
+
+                    @foreach($categories as $category)
+
+                    <option
+                        value="{{ $category->id }}"
+                        {{ request('category') == $category->id ? 'selected' : '' }}>
+
+                    {{ $category->category_name }}
+
+                    </option>
+
+                    @endforeach
+
+                </select>
+
+                <select
+                    name="supplier"
+                    class="border rounded px-4 py-2">
+
+                    <option value="">All Suppliers</option>
+
+                    @foreach($suppliers as $supplier)
+
+                    <option
+                        value="{{ $supplier->id }}"
+                        {{ request('supplier') == $supplier->id ? 'selected' : '' }}>
+
+                    {{ $supplier->company_name }}
+
+                    </option>
+
+                    @endforeach
+
+                </select>
+
+                <select
+                    name="status"
+                    class="border rounded px-4 py-2">
+
+                    <option value="">All Status</option>
+
+                    <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>
+                    Available
+                    </option>
+
+                    <option value="Assigned" {{ request('status') == 'Assigned' ? 'selected' : '' }}>
+                    Assigned
+                    </option>
+
+                    <option value="Maintenance" {{ request('status') == 'Maintenance' ? 'selected' : '' }}>
+                    Maintenance
+                    </option>
+
+                    <option value="Retired" {{ request('status') == 'Retired' ? 'selected' : '' }}>
+                    Retired
+                    </option>
+
+                </select>
+
+                <div class="flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+
+                        Filter
+
+                    </button>
+
+                    <a
+                        href="{{ route('assets.index') }}"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+
+                        Reset
+
+                    </a>
+
+                </div>
 
             </div>
 
         </form>
 
-        <table class="table-auto w-full border border-gray-300">
+        <table class="w-full border border-gray-300">
 
             <thead class="bg-gray-200">
 
@@ -97,7 +169,25 @@
                 </td>
 
                 <td class="border px-3 py-2">
-                    {{ $asset->status }}
+
+                    @if($asset->status == 'Available')
+                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
+                                    {{ $asset->status }}
+                                </span>
+                    @elseif($asset->status == 'Assigned')
+                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                                    {{ $asset->status }}
+                                </span>
+                    @elseif($asset->status == 'Maintenance')
+                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                                    {{ $asset->status }}
+                                </span>
+                    @else
+                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
+                                    {{ $asset->status }}
+                                </span>
+                    @endif
+
                 </td>
 
                 <td class="border px-3 py-2">
@@ -106,14 +196,18 @@
 
                 <td class="border px-3 py-2">
 
-                    <a href="{{ route('assets.edit', $asset) }}"
-                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                    <a
+                        href="{{ route('assets.edit', $asset) }}"
+                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+
                         Edit
+
                     </a>
 
-                    <form action="{{ route('assets.destroy', $asset) }}"
-                          method="POST"
-                          class="inline">
+                    <form
+                        action="{{ route('assets.destroy', $asset) }}"
+                        method="POST"
+                        class="inline">
 
                         @csrf
                         @method('DELETE')
@@ -151,7 +245,7 @@
 
         </table>
 
-        <div class="mt-5">
+        <div class="mt-6">
 
             {{ $assets->withQueryString()->links() }}
 
