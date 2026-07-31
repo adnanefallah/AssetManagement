@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AssetsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Asset;
 use App\Models\Category;
@@ -160,5 +162,13 @@ class AssetController extends Controller
         $pdf = Pdf::loadView('assets.pdf', compact('assets'));
 
         return $pdf->download('assets-report.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(
+            new AssetsExport(),
+            'assets.xlsx'
+        );
     }
 }
