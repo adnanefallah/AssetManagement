@@ -22,6 +22,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/assets/pdf', [AssetController::class, 'exportPdf'])->name('assets.pdf');
+    Route::resource('assets', AssetController::class);
     Route::resource('maintenances', MaintenanceController::class);
     Route::resource('tickets', TicketController::class);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
