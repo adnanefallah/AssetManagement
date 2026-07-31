@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AssetAssignmentController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\SupplierController;
@@ -19,6 +20,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::resource('asset-assignments', AssetAssignmentController::class);
     Route::resource('assets', AssetController::class);
     Route::resource('suppliers', SupplierController::class);
