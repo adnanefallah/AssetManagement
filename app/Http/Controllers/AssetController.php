@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AssetsExport;
 use App\Helpers\ActivityLogger;
+use App\Helpers\AssetHistoryLogger;
 use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Supplier;
@@ -95,6 +96,12 @@ class AssetController extends Controller
             'Created asset: ' . $asset->asset_name
         );
 
+        AssetHistoryLogger::log(
+            $asset->id,
+            'Asset Created',
+            'New asset added to inventory.'
+        );
+
         return redirect()
             ->route('assets.index')
             ->with('success', 'Asset created successfully.');
@@ -149,6 +156,12 @@ class AssetController extends Controller
             'Updated asset: ' . $asset->asset_name
         );
 
+        AssetHistoryLogger::log(
+            $asset->id,
+            'Asset Updated',
+            'Asset information updated.'
+        );
+
         return redirect()
             ->route('assets.index')
             ->with('success', 'Asset updated successfully.');
@@ -163,6 +176,12 @@ class AssetController extends Controller
             'Delete',
             'Assets',
             'Deleted asset: ' . $asset->asset_name
+        );
+
+        AssetHistoryLogger::log(
+            $asset->id,
+            'Asset Deleted',
+            'Asset removed from inventory.'
         );
 
         $asset->delete();

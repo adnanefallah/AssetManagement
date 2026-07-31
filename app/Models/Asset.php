@@ -46,4 +46,9 @@ class Asset extends Model
     {
         return $this->hasMany(Maintenance::class);
     }
+
+    public function histories()
+    {
+        return $this->hasMany(AssetHistory::class)->latest();
+    }
 }

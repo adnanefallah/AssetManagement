@@ -185,21 +185,29 @@
                 <td class="border px-3 py-2">
 
                     @if($asset->status == 'Available')
+
                     <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
                                     {{ $asset->status }}
                                 </span>
+
                     @elseif($asset->status == 'Assigned')
+
                     <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
                                     {{ $asset->status }}
                                 </span>
+
                     @elseif($asset->status == 'Maintenance')
+
                     <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
                                     {{ $asset->status }}
                                 </span>
+
                     @else
+
                     <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
                                     {{ $asset->status }}
                                 </span>
+
                     @endif
 
                 </td>
@@ -210,32 +218,44 @@
 
                 <td class="border px-3 py-2">
 
-                    <a
-                        href="{{ route('assets.edit', $asset) }}"
-                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                    <div class="flex flex-wrap gap-2">
 
-                        Edit
+                        <a
+                            href="{{ route('assets.history', $asset) }}"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded">
 
-                    </a>
+                            History
 
-                    <form
-                        action="{{ route('assets.destroy', $asset) }}"
-                        method="POST"
-                        class="inline">
+                        </a>
 
-                        @csrf
-                        @method('DELETE')
+                        <a
+                            href="{{ route('assets.edit', $asset) }}"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
 
-                        <button
-                            type="submit"
-                            onclick="return confirm('Delete this asset?')"
-                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                            Edit
 
-                            Delete
+                        </a>
 
-                        </button>
+                        <form
+                            action="{{ route('assets.destroy', $asset) }}"
+                            method="POST"
+                            class="inline">
 
-                    </form>
+                            @csrf
+                            @method('DELETE')
+
+                            <button
+                                type="submit"
+                                onclick="return confirm('Delete this asset?')"
+                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </div>
 
                 </td>
 
