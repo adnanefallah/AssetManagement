@@ -31,4 +31,9 @@ class Asset extends Model
     {
         return $this->belongsTo(Supplier::class);
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(AssetAssignment::class);
+    }
 }
