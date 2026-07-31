@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AssetsExport;
-use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Helpers\ActivityLogger;
 use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Supplier;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AssetController extends Controller
 {
@@ -52,8 +53,8 @@ class AssetController extends Controller
 
         return view('assets.index', [
             'assets' => $assets,
-            'categories' => \App\Models\Category::orderBy('category_name')->get(),
-            'suppliers' => \App\Models\Supplier::orderBy('company_name')->get(),
+            'categories' => Category::orderBy('category_name')->get(),
+            'suppliers' => Supplier::orderBy('company_name')->get(),
         ]);
     }
 
@@ -69,24 +70,30 @@ class AssetController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource.
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'asset_code'      => 'required|unique:assets',
-            'asset_name'      => 'required',
-            'serial_number'   => 'required|unique:assets',
-            'category_id'     => 'required|exists:categories,id',
-            'supplier_id'     => 'nullable|exists:suppliers,id',
-            'purchase_date'   => 'nullable|date',
-            'warranty_end'    => 'nullable|date',
-            'purchase_price'  => 'nullable|numeric',
-            'status'          => 'required',
-            'location'        => 'nullable',
+        $data = $request->validate([
+            'asset_code' => 'required|unique:assets',
+            'asset_name' => 'required',
+            'serial_number' => 'required|unique:assets',
+            'category_id' => 'required|exists:categories,id',
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'purchase_date' => 'nullable|date',
+            'warranty_end' => 'nullable|date',
+            'purchase_price' => 'nullable|numeric',
+            'status' => 'required',
+            'location' => 'nullable',
         ]);
 
-        Asset::create($request->all());
+        $asset = Asset::create($data);
+
+        ActivityLogger::log(
+            'Create',
+            'Assets',
+            'Created asset: ' . $asset->asset_name
+        );
 
         return redirect()
             ->route('assets.index')
@@ -117,11 +124,11 @@ class AssetController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource.
      */
     public function update(Request $request, Asset $asset)
     {
-        $request->validate([
+        $data = $request->validate([
             'asset_code' => 'required|unique:assets,asset_code,' . $asset->id,
             'asset_name' => 'required',
             'serial_number' => 'required|unique:assets,serial_number,' . $asset->id,
@@ -134,7 +141,13 @@ class AssetController extends Controller
             'location' => 'nullable',
         ]);
 
-        $asset->update($request->all());
+        $asset->update($data);
+
+        ActivityLogger::log(
+            'Update',
+            'Assets',
+            'Updated asset: ' . $asset->asset_name
+        );
 
         return redirect()
             ->route('assets.index')
@@ -142,10 +155,16 @@ class AssetController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource.
      */
     public function destroy(Asset $asset)
     {
+        ActivityLogger::log(
+            'Delete',
+            'Assets',
+            'Deleted asset: ' . $asset->asset_name
+        );
+
         $asset->delete();
 
         return redirect()
@@ -153,6 +172,9 @@ class AssetController extends Controller
             ->with('success', 'Asset deleted successfully.');
     }
 
+    /**
+     * Export assets to PDF.
+     */
     public function exportPdf()
     {
         $assets = Asset::with(['category', 'supplier'])
@@ -164,6 +186,9 @@ class AssetController extends Controller
         return $pdf->download('assets-report.pdf');
     }
 
+    /**
+     * Export assets to Excel.
+     */
     public function exportExcel()
     {
         return Excel::download(
