@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AssetAssignmentController;
 use App\Http\Controllers\AssetController;
@@ -20,6 +21,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::resource('tickets', TicketController::class);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::resource('asset-assignments', AssetAssignmentController::class);
     Route::resource('assets', AssetController::class);

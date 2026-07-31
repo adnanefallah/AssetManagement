@@ -36,4 +36,9 @@ class Asset extends Model
     {
         return $this->hasMany(AssetAssignment::class);
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }
