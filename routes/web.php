@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AssetAssignmentController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetHistoryController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MaintenanceController;
@@ -71,6 +72,24 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reports', [ReportController::class, 'index'])
         ->name('reports.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Backup & Restore
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/backups', [BackupController::class, 'index'])
+        ->name('backups.index');
+
+    Route::post('/backups/create', [BackupController::class, 'create'])
+        ->name('backups.create');
+
+    Route::get('/backups/download/{file}', [BackupController::class, 'download'])
+        ->name('backups.download');
+
+    Route::delete('/backups/{file}', [BackupController::class, 'destroy'])
+        ->name('backups.destroy');
 
     /*
     |--------------------------------------------------------------------------
