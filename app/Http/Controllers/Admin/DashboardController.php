@@ -42,6 +42,12 @@ class DashboardController extends Controller
             'availableAssets' => Asset::where('status', 'Available')->count(),
             'assignedAssets' => Asset::where('status', 'Assigned')->count(),
             'maintenanceAssets' => Asset::where('status', 'Maintenance')->count(),
+            'warrantySoon' => Asset::whereNotNull('warranty_end')
+                ->whereBetween('warranty_end', [
+                    now(),
+                    now()->addDays(30)
+                ])
+                ->count(),
             'retiredAssets' => Asset::where('status', 'Retired')->count(),
 
             'assetStatus' => $assetStatus,

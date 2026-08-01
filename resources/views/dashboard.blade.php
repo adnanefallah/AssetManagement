@@ -32,6 +32,52 @@
 
             </div>
 
+            <!-- Notification Cards -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+                <div class="bg-green-100 border-l-4 border-green-500 p-5 rounded shadow">
+                    <h3 class="text-green-700 font-bold text-lg">
+                        Available Assets
+                    </h3>
+
+                    <p class="text-3xl font-bold mt-2">
+                        {{ $availableAssets }}
+                    </p>
+                </div>
+
+                <div class="bg-blue-100 border-l-4 border-blue-500 p-5 rounded shadow">
+                    <h3 class="text-blue-700 font-bold text-lg">
+                        Assigned Assets
+                    </h3>
+
+                    <p class="text-3xl font-bold mt-2">
+                        {{ $assignedAssets }}
+                    </p>
+                </div>
+
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 p-5 rounded shadow">
+                    <h3 class="text-yellow-700 font-bold text-lg">
+                        Warranty Expiring
+                    </h3>
+
+                    <p class="text-3xl font-bold mt-2">
+                        {{ $warrantySoon }}
+                    </p>
+                </div>
+
+                <div class="bg-red-100 border-l-4 border-red-500 p-5 rounded shadow">
+                    <h3 class="text-red-700 font-bold text-lg">
+                        Retired Assets
+                    </h3>
+
+                    <p class="text-3xl font-bold mt-2">
+                        {{ $retiredAssets }}
+                    </p>
+                </div>
+
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                 <div class="bg-white p-6 rounded-lg shadow">
