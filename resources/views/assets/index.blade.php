@@ -287,6 +287,14 @@
                         </a>
 
                         <a
+                            href="{{ route('assets.qrcode', $asset) }}"
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded">
+
+                            QR Code
+
+                        </a>
+
+                        <a
                             href="{{ route('assets.edit', $asset) }}"
                             class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
 
