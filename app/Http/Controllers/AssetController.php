@@ -12,6 +12,7 @@ use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AssetController extends Controller
 {
@@ -245,5 +246,13 @@ class AssetController extends Controller
             new AssetsExport(),
             'assets.xlsx'
         );
+    }
+
+    /**
+     * Download Asset QR Code.
+     */
+    public function qrCode(Asset $asset)
+    {
+        return view('assets.qrcode', compact('asset'));
     }
 }
