@@ -1,57 +1,113 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Department
-        </h2>
-    </x-slot>
+    <div class="flex items-center justify-between mb-8">
 
-    <div class="p-6">
+        <div>
+
+            <h1 class="text-3xl font-bold text-gray-900">
+                {{ __('departments.edit_title') }}
+            </h1>
+
+            <p class="mt-1 text-sm text-gray-500">
+                {{ __('departments.edit_subtitle') }}
+            </p>
+
+        </div>
+
+        <a href="{{ route('departments.index') }}"
+           class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+
+            ← {{ __('departments.back') }}
+
+        </a>
+
+    </div>
+
+    <div class="bg-white rounded-xl shadow border p-8">
 
         <form action="{{ route('departments.update', $department) }}" method="POST">
 
             @csrf
             @method('PUT')
 
-            <div class="mb-4">
-                <label class="block mb-2">Department Name</label>
+            {{-- Department Name --}}
+            <div class="mb-6">
+
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('departments.department_name') }}
+                </label>
 
                 <input
                     type="text"
                     name="department_name"
                     value="{{ old('department_name', $department->department_name) }}"
-                    class="border w-full p-2 rounded">
+                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    required
+                >
+
+                @error('department_name')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+
             </div>
 
-            <div class="mb-4">
-                <label class="block mb-2">Location</label>
+            {{-- Location --}}
+            <div class="mb-6">
+
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('departments.location') }}
+                </label>
 
                 <input
                     type="text"
                     name="location"
                     value="{{ old('location', $department->location) }}"
-                    class="border w-full p-2 rounded">
+                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                >
+
+                @error('location')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+
             </div>
 
-            <div class="mb-4">
-                <label class="block mb-2">Description</label>
+            {{-- Description --}}
+            <div class="mb-8">
+
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('departments.description') }}
+                </label>
 
                 <textarea
                     name="description"
-                    class="border w-full p-2 rounded"
-                    rows="4">{{ old('description', $department->description) }}</textarea>
+                    rows="4"
+                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                >{{ old('description', $department->description) }}</textarea>
+
+                @error('description')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+
             </div>
 
-            <button
-                type="submit"
-                class="bg-blue-600 text-white px-4 py-2 rounded">
-                Update
-            </button>
+            <div class="flex items-center gap-3">
 
-            <a href="{{ route('departments.index') }}"
-               class="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
-                Cancel
-            </a>
+                <button
+                    type="submit"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+
+                    {{ __('departments.update') }}
+
+                </button>
+
+                <a href="{{ route('departments.index') }}"
+                   class="px-6 py-2 border rounded-lg hover:bg-gray-100">
+
+                    {{ __('departments.cancel') }}
+
+                </a>
+
+            </div>
 
         </form>
 

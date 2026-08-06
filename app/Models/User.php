@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'status',
     ];
 
     /**
@@ -72,13 +73,28 @@ class User extends Authenticatable
      * Helpers
      */
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
-        return $this->role === 'Admin';
+        return $this->role === 'Administrator';
     }
 
-    public function isEmployee()
+    public function isTechnician(): bool
     {
-        return $this->role === 'Employee';
+        return $this->role === 'Technician';
+    }
+
+    public function isUser(): bool
+    {
+        return $this->role === 'User';
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'Active';
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->status === 'Inactive';
     }
 }

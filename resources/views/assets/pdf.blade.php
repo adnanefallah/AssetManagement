@@ -1,40 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app()->getLocale() }}">
 
 <head>
 
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
 
-    <title>Assets Report</title>
+    <title>{{ __('assets.report') }}</title>
 
     <style>
 
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
         body{
-            font-family: DejaVu Sans;
+            font-family: DejaVu Sans, sans-serif;
             font-size:12px;
+            color:#111827;
+            padding:30px;
+        }
+
+        .header{
+            margin-bottom:25px;
+            border-bottom:2px solid #111827;
+            padding-bottom:15px;
+        }
+
+        .title{
+            font-size:24px;
+            font-weight:bold;
+        }
+
+        .subtitle{
+            margin-top:5px;
+            color:#6b7280;
+            font-size:12px;
+        }
+
+        .date{
+            float:right;
+            font-size:12px;
+            color:#6b7280;
         }
 
         table{
             width:100%;
             border-collapse:collapse;
+            margin-top:20px;
         }
 
-        table, th, td{
-            border:1px solid #000;
+        thead{
+            background:#f3f4f6;
         }
 
         th{
-            background:#e5e7eb;
-            padding:8px;
+            border:1px solid #d1d5db;
+            padding:10px;
+            text-align:left;
+            font-size:12px;
         }
 
         td{
-            padding:8px;
+            border:1px solid #d1d5db;
+            padding:10px;
         }
 
-        h2{
+        tbody tr:nth-child(even){
+            background:#f9fafb;
+        }
+
+        .footer{
+            margin-top:25px;
             text-align:center;
-            margin-bottom:20px;
+            font-size:11px;
+            color:#6b7280;
         }
 
     </style>
@@ -43,7 +84,21 @@
 
 <body>
 
-<h2>Assets Report</h2>
+<div class="header">
+
+    <div class="date">
+        {{ now()->format('d M Y') }}
+    </div>
+
+    <div class="title">
+        {{ __('assets.system') }}
+    </div>
+
+    <div class="subtitle">
+        {{ __('assets.report') }}
+    </div>
+
+</div>
 
 <table>
 
@@ -51,11 +106,11 @@
 
     <tr>
 
-        <th>Code</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Supplier</th>
-        <th>Status</th>
+        <th style="width:12%;">{{ __('assets.code') }}</th>
+        <th style="width:28%;">{{ __('assets.name') }}</th>
+        <th style="width:20%;">{{ __('assets.category') }}</th>
+        <th style="width:20%;">{{ __('assets.supplier') }}</th>
+        <th style="width:20%;">{{ __('assets.status') }}</th>
 
     </tr>
 
@@ -63,7 +118,7 @@
 
     <tbody>
 
-    @foreach($assets as $asset)
+    @forelse($assets as $asset)
 
     <tr>
 
@@ -71,19 +126,35 @@
 
         <td>{{ $asset->asset_name }}</td>
 
-        <td>{{ $asset->category?->category_name }}</td>
+        <td>{{ $asset->category?->category_name ?? '-' }}</td>
 
-        <td>{{ $asset->supplier?->company_name }}</td>
+        <td>{{ $asset->supplier?->company_name ?? '-' }}</td>
 
-        <td>{{ $asset->status }}</td>
+        <td>{{ __('assets.' . strtolower($asset->status)) }}</td>
 
     </tr>
 
-    @endforeach
+    @empty
+
+    <tr>
+
+        <td colspan="5" style="text-align:center;">
+            {{ __('assets.no_assets') }}
+        </td>
+
+    </tr>
+
+    @endforelse
 
     </tbody>
 
 </table>
+
+<div class="footer">
+
+    {{ __('assets.generated_by') }}
+
+</div>
 
 </body>
 

@@ -1,27 +1,63 @@
 <?php
 
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ReportController;
-use App\Http\Controllers\AssetAssignmentController;
-use App\Http\Controllers\AssetController;
-use App\Http\Controllers\AssetHistoryController;
-use App\Http\Controllers\BackupController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\MaintenanceController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\TicketController;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Assignments\AssetAssignmentController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Inventory\AssetController;
+use App\Http\Controllers\Inventory\CategoryController;
+use App\Http\Controllers\Inventory\DepartmentController;
+use App\Http\Controllers\Inventory\SupplierController;
+use App\Http\Controllers\Logs\ActivityLogController;
+use App\Http\Controllers\Logs\AssetHistoryController;
+use App\Http\Controllers\Maintenance\MaintenanceController;
+use App\Http\Controllers\Maintenance\TicketController;
+use App\Http\Controllers\Settings\ProfileController;
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| Language Switch
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/lang/{locale}', function ($locale) {
+
+    if (in_array($locale, ['en', 'fr'])) {
+        Session::put('locale', $locale);
+    }
+
+    return back();
+
+})->name('language');
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| Protected Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
 
@@ -75,24 +111,6 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Backup & Restore
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('/backups', [BackupController::class, 'index'])
-        ->name('backups.index');
-
-    Route::post('/backups/create', [BackupController::class, 'create'])
-        ->name('backups.create');
-
-    Route::get('/backups/download/{file}', [BackupController::class, 'download'])
-        ->name('backups.download');
-
-    Route::delete('/backups/{file}', [BackupController::class, 'destroy'])
-        ->name('backups.destroy');
-
-    /*
-    |--------------------------------------------------------------------------
     | Resources
     |--------------------------------------------------------------------------
     */
@@ -104,6 +122,18 @@ Route::middleware('auth')->group(function () {
     Route::resource('suppliers', SupplierController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('departments', DepartmentController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Users
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware('role:Administrator')->group(function () {
+
+        Route::resource('users', UserController::class);
+
+    });
 
     /*
     |--------------------------------------------------------------------------
@@ -121,4 +151,4 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

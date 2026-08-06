@@ -1,59 +1,70 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Assets
-        </h2>
-    </x-slot>
+    <div class="flex items-center justify-between mb-8">
 
-    <div class="p-6">
+        <div>
 
-        @if(session('success'))
-        <div class="mb-4 rounded bg-green-100 border border-green-400 px-4 py-3 text-green-700">
-            {{ session('success') }}
+            <h2 class="text-3xl font-bold text-gray-900">
+                {{ __('assets.title') }}
+            </h2>
+
+            <p class="text-gray-500 mt-1">
+                {{ __('assets.subtitle') }}
+            </p>
+
         </div>
-        @endif
 
-        <div class="flex justify-between items-center mb-6">
+        @if(!auth()->user()->isUser())
+
+        <div class="flex gap-3">
 
             <a href="{{ route('assets.create') }}"
-               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-                + Add Asset
+               class="bg-black text-white px-5 py-2.5 rounded-lg hover:bg-gray-800 transition">
+                + {{ __('assets.add') }}
             </a>
 
-            <div class="flex gap-2">
+            <a href="{{ route('assets.pdf') }}"
+               class="border border-gray-300 bg-white text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-100 transition">
+                {{ __('assets.export_pdf') }}
+            </a>
 
-                <a href="{{ route('assets.pdf') }}"
-                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
-                    Export PDF
-                </a>
-
-                <a href="{{ route('assets.excel') }}"
-                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
-                    Export Excel
-                </a>
-
-            </div>
+            <a href="{{ route('assets.excel') }}"
+               class="border border-gray-300 bg-white text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-100 transition">
+                {{ __('assets.export_excel') }}
+            </a>
 
         </div>
 
-        <!-- Search & Filters -->
-        <form action="{{ route('assets.index') }}" method="GET" class="mb-6">
+        @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+    </div>
+
+    @if(session('success'))
+
+    <div class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">
+        {{ session('success') }}
+    </div>
+
+    @endif
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow p-6 mb-6">
+
+        <form action="{{ route('assets.index') }}" method="GET">
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
 
                 <input
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Search by name, code or serial number..."
-                    class="border rounded px-4 py-2 w-full">
+                    placeholder="{{ __('assets.search') }}"
+                    class="rounded-lg border-gray-300">
 
-                <select
-                    name="category"
-                    class="border rounded px-4 py-2">
+                <select name="category" class="rounded-lg border-gray-300">
 
-                    <option value="">All Categories</option>
+                    <option value="">
+                        {{ __('assets.all_categories') }}
+                    </option>
 
                     @foreach($categories as $category)
 
@@ -69,11 +80,11 @@
 
                 </select>
 
-                <select
-                    name="supplier"
-                    class="border rounded px-4 py-2">
+                <select name="supplier" class="rounded-lg border-gray-300">
 
-                    <option value="">All Suppliers</option>
+                    <option value="">
+                        {{ __('assets.all_suppliers') }}
+                    </option>
 
                     @foreach($suppliers as $supplier)
 
@@ -89,26 +100,26 @@
 
                 </select>
 
-                <select
-                    name="status"
-                    class="border rounded px-4 py-2">
+                <select name="status" class="rounded-lg border-gray-300">
 
-                    <option value="">All Status</option>
+                    <option value="">
+                        {{ __('assets.all_status') }}
+                    </option>
 
                     <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>
-                    Available
+                    {{ __('assets.available') }}
                     </option>
 
                     <option value="Assigned" {{ request('status') == 'Assigned' ? 'selected' : '' }}>
-                    Assigned
+                    {{ __('assets.assigned') }}
                     </option>
 
                     <option value="Maintenance" {{ request('status') == 'Maintenance' ? 'selected' : '' }}>
-                    Maintenance
+                    {{ __('assets.maintenance') }}
                     </option>
 
                     <option value="Retired" {{ request('status') == 'Retired' ? 'selected' : '' }}>
-                    Retired
+                    {{ __('assets.retired') }}
                     </option>
 
                 </select>
@@ -117,17 +128,17 @@
 
                     <button
                         type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                        class="bg-black text-white px-4 rounded-lg hover:bg-gray-800 transition">
 
-                        Filter
+                        {{ __('assets.filter') }}
 
                     </button>
 
                     <a
                         href="{{ route('assets.index') }}"
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                        class="border border-gray-300 bg-white text-gray-700 px-4 rounded-lg flex items-center hover:bg-gray-100 transition">
 
-                        Reset
+                        {{ __('assets.reset') }}
 
                     </a>
 
@@ -135,191 +146,204 @@
 
             </div>
 
-        </form>
+    </div>
 
-        <table class="w-full border border-gray-300">
+    <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
 
-            <thead class="bg-gray-200">
+        <table class="w-full">
+
+            <thead class="bg-gray-100">
 
             <tr>
 
-                <th class="border px-3 py-2">Image</th>
-                <th class="border px-3 py-2">Code</th>
-                <th class="border px-3 py-2">Name</th>
-                <th class="border px-3 py-2">Serial Number</th>
-                <th class="border px-3 py-2">Category</th>
-                <th class="border px-3 py-2">Supplier</th>
-                <th class="border px-3 py-2">Status</th>
-                <th class="border px-3 py-2">Warranty</th>
-                <th class="border px-3 py-2">Location</th>
-                <th class="border px-3 py-2">Actions</th>
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.image') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.code') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.name') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.serial') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.category') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.supplier') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.status') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.warranty') }}
+                </th>
+
+                <th class="px-5 py-4 text-left">
+                    {{ __('assets.location') }}
+                </th>
+
+                <th class="px-5 py-4 text-center">
+                    {{ __('assets.actions') }}
+                </th>
 
             </tr>
 
             </thead>
 
             <tbody>
-
             @forelse($assets as $asset)
 
-            <tr>
+            <tr class="border-t hover:bg-gray-50">
 
-                <td class="border px-3 py-2 text-center">
+                <td class="px-5 py-4">
 
                     @if($asset->image)
 
-                        <img
-                            src="{{ asset('storage/' . $asset->image) }}"
-                            alt="{{ $asset->asset_name }}"
-                            class="w-16 h-16 object-cover rounded mx-auto">
+                    <img
+                        src="{{ asset('storage/'.$asset->image) }}"
+                        alt="{{ $asset->asset_name }}"
+                        class="w-14 h-14 rounded-lg object-cover border">
 
                     @else
 
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-sm">
-                            No Image
-                        </span>
+                    <div class="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                        —
+                    </div>
 
                     @endif
 
                 </td>
 
-
-                <td class="border px-3 py-2">
+                <td class="px-5 py-4">
                     {{ $asset->asset_code }}
                 </td>
 
-                <td class="border px-3 py-2">
+                <td class="px-5 py-4 font-medium">
                     {{ $asset->asset_name }}
                 </td>
 
-                <td class="border px-3 py-2">
+                <td class="px-5 py-4">
                     {{ $asset->serial_number }}
                 </td>
 
-                <td class="border px-3 py-2">
-                    {{ $asset->category?->category_name ?? '-' }}
+                <td class="px-5 py-4">
+                    {{ $asset->category->category_name ?? '-' }}
                 </td>
 
-                <td class="border px-3 py-2">
-                    {{ $asset->supplier?->company_name ?? '-' }}
+                <td class="px-5 py-4">
+                    {{ $asset->supplier->company_name ?? '-' }}
                 </td>
 
-                <td class="border px-3 py-2">
-
-                    @if($asset->status == 'Available')
-
-                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
-                                    {{ $asset->status }}
-                                </span>
-
-                    @elseif($asset->status == 'Assigned')
-
-                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                                    {{ $asset->status }}
-                                </span>
-
-                    @elseif($asset->status == 'Maintenance')
-
-                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
-                                    {{ $asset->status }}
-                                </span>
-
-                    @else
-
-                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
-                                    {{ $asset->status }}
-                                </span>
-
-                    @endif
-
-                </td>
-
-                <td class="border px-3 py-2">
+                <td class="px-5 py-4">
 
                     @php
-                    $expiry = $asset->warranty_end
-                    ? \Carbon\Carbon::parse($asset->warranty_end)
-                    : null;
+
+                    $color = match($asset->status){
+                    'Available' => 'bg-green-100 text-green-700',
+                    'Assigned' => 'bg-blue-100 text-blue-700',
+                    'Maintenance' => 'bg-yellow-100 text-yellow-700',
+                    'Retired' => 'bg-red-100 text-red-700',
+                    default => 'bg-gray-100 text-gray-700'
+                    };
+
                     @endphp
 
-                    @if(!$expiry)
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $color }}">
 
-                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                        No Warranty
+                        @switch($asset->status)
+
+                            @case('Available')
+                                {{ __('assets.available') }}
+                                @break
+
+                            @case('Assigned')
+                                {{ __('assets.assigned') }}
+                                @break
+
+                            @case('Maintenance')
+                                {{ __('assets.maintenance') }}
+                                @break
+
+                            @case('Retired')
+                                {{ __('assets.retired') }}
+                                @break
+
+                            @default
+                                {{ $asset->status }}
+
+                        @endswitch
+
                     </span>
-
-                                @elseif($expiry->isPast())
-
-                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
-                        Expired
-                    </span>
-
-                                @elseif($expiry->isFuture() && now()->diffInDays($expiry) <= 30)
-
-                                <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
-                        Expires Soon
-                    </span>
-
-                                @else
-
-                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
-                        Active
-                    </span>
-
-                    @endif
 
                 </td>
 
-                <td class="border px-3 py-2">
-                    {{ $asset->location }}
+                <td class="px-5 py-4">
+                    {{ $asset->warranty_expiry ?? '-' }}
                 </td>
 
-                <td class="border px-3 py-2">
+                <td class="px-5 py-4">
+                    {{ $asset->location ?? '-' }}
+                </td>
 
-                    <div class="flex flex-wrap gap-2">
+                <td class="px-5 py-4">
+
+                    <div class="flex justify-center gap-2 flex-wrap">
+
+                        @if(!auth()->user()->isUser())
 
                         <a
-                            href="{{ route('assets.history', $asset) }}"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded">
+                            href="{{ route('assets.edit', $asset) }}"
+                            class="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-100 transition">
 
-                            History
+                            {{ __('assets.edit') }}
 
                         </a>
 
                         <a
                             href="{{ route('assets.qrcode', $asset) }}"
-                            class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded">
+                            class="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-100 transition">
 
-                            QR Code
+                            {{ __('assets.qr') }}
 
                         </a>
 
                         <a
-                            href="{{ route('assets.edit', $asset) }}"
-                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                            href="{{ route('assets.history', $asset) }}"
+                            class="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-100 transition">
 
-                            Edit
+                            {{ __('assets.history') }}
 
                         </a>
 
                         <form
                             action="{{ route('assets.destroy', $asset) }}"
                             method="POST"
-                            class="inline">
+                            onsubmit="return confirm('{{ __('assets.confirm_delete') }}')">
 
                             @csrf
                             @method('DELETE')
 
                             <button
                                 type="submit"
-                                onclick="return confirm('Delete this asset?')"
-                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                class="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
 
-                                Delete
+                                {{ __('assets.delete') }}
 
                             </button>
 
                         </form>
+
+                        @endif
 
                     </div>
 
@@ -331,9 +355,9 @@
 
             <tr>
 
-                <td colspan="10" class="text-center py-6 text-gray-500">
+                <td colspan="10" class="py-10 text-center text-gray-500">
 
-                    No assets found.
+                    {{ __('assets.empty') }}
 
                 </td>
 
@@ -345,12 +369,10 @@
 
         </table>
 
-        <div class="mt-6">
+    </div>
 
-            {{ $assets->withQueryString()->links() }}
-
-        </div>
-
+    <div class="mt-6">
+        {{ $assets->links() }}
     </div>
 
 </x-app-layout>

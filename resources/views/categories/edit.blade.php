@@ -1,53 +1,78 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2>Edit Category</h2>
-    </x-slot>
+    <div class="max-w-3xl mx-auto">
 
-    <div class="p-6">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">
+            {{ __('categories.edit_title') }}
+        </h2>
 
-        <form action="{{ route('categories.update',$category) }}" method="POST">
+        <div class="bg-white rounded-xl shadow border border-gray-200 p-8">
 
-            @csrf
-            @method('PUT')
+            <form action="{{ route('categories.update', $category) }}" method="POST">
 
-            <div class="mb-4">
+                @csrf
+                @method('PUT')
 
-                <label>Category Name</label>
+                <div class="mb-6">
 
-                <input
-                    type="text"
-                    name="category_name"
-                    value="{{ old('category_name',$category->category_name) }}"
-                    class="border w-full p-2 rounded">
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('categories.category_name') }}
+                    </label>
 
-            </div>
+                    <input
+                        type="text"
+                        name="category_name"
+                        value="{{ old('category_name', $category->category_name) }}"
+                        placeholder="{{ __('categories.category_placeholder') }}"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-black">
 
-            <div class="mb-4">
+                    @error('category_name')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
 
-                <label>Description</label>
+                </div>
 
-                <textarea
-                    name="description"
-                    class="border w-full p-2 rounded">{{ old('description',$category->description) }}</textarea>
+                <div class="mb-8">
 
-            </div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('categories.description') }}
+                    </label>
 
-            <button
-                class="bg-blue-600 text-white px-4 py-2 rounded">
+                    <textarea
+                        name="description"
+                        rows="5"
+                        placeholder="{{ __('categories.description_placeholder') }}"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-black">{{ old('description', $category->description) }}</textarea>
 
-                Update
+                    @error('description')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
 
-            </button>
+                </div>
 
-            <a href="{{ route('categories.index') }}"
-               class="bg-gray-500 text-white px-4 py-2 rounded">
+                <div class="flex gap-3">
 
-                Cancel
+                    <button
+                        type="submit"
+                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
 
-            </a>
+                        {{ __('categories.update') }}
 
-        </form>
+                    </button>
+
+                    <a
+                        href="{{ route('categories.index') }}"
+                        class="border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+
+                        {{ __('categories.cancel') }}
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 

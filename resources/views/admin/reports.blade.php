@@ -1,144 +1,114 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Reports Dashboard
+    <div class="mb-8">
+
+        <h2 class="text-3xl font-bold text-gray-900">
+            {{ __('reports.title') }}
         </h2>
-    </x-slot>
 
-    <div class="p-6">
+        <p class="text-gray-500 mt-1">
+            {{ __('reports.subtitle') }}
+        </p>
 
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    </div>
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Users</h3>
-                <p class="text-3xl font-bold text-blue-600">
-                    {{ $users }}
-                </p>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Departments</h3>
-                <p class="text-3xl font-bold text-green-600">
-                    {{ $departments }}
-                </p>
-            </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.users') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $users }}</h3>
+        </div>
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Categories</h3>
-                <p class="text-3xl font-bold text-purple-600">
-                    {{ $categories }}
-                </p>
-            </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.departments') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $departments }}</h3>
+        </div>
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Suppliers</h3>
-                <p class="text-3xl font-bold text-orange-600">
-                    {{ $suppliers }}
-                </p>
-            </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.categories') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $categories }}</h3>
+        </div>
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Assets</h3>
-                <p class="text-3xl font-bold text-indigo-600">
-                    {{ $assets }}
-                </p>
-            </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.suppliers') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $suppliers }}</h3>
+        </div>
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Assignments</h3>
-                <p class="text-3xl font-bold text-cyan-600">
-                    {{ $assignments }}
-                </p>
-            </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.assets') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $assets }}</h3>
+        </div>
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Tickets</h3>
-                <p class="text-3xl font-bold text-red-600">
-                    {{ $tickets }}
-                </p>
-            </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.assignments') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $assignments }}</h3>
+        </div>
 
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-gray-500">Maintenances</h3>
-                <p class="text-3xl font-bold text-yellow-600">
-                    {{ $maintenances }}
-                </p>
-            </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.tickets') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $tickets }}</h3>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 shadow p-6">
+            <p class="text-sm text-gray-500">{{ __('reports.maintenances') }}</p>
+            <h3 class="text-4xl font-bold mt-3">{{ $maintenances }}</h3>
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow overflow-hidden">
+
+        <div class="px-6 py-4 border-b">
+
+            <h3 class="text-xl font-semibold">
+                {{ __('reports.asset_status_summary') }}
+            </h3>
 
         </div>
 
-        <!-- Asset Status Table -->
-        <div class="bg-white shadow rounded-lg">
+        <table class="w-full">
 
-            <div class="border-b px-6 py-4">
-                <h3 class="text-lg font-semibold">
-                    Asset Status Summary
-                </h3>
-            </div>
+            <thead class="bg-gray-100">
 
-            <table class="w-full">
+            <tr>
 
-                <thead class="bg-gray-100">
+                <th class="px-6 py-4 text-left font-semibold">
+                    {{ __('reports.status') }}
+                </th>
 
-                <tr>
+                <th class="px-6 py-4 text-left font-semibold">
+                    {{ __('reports.count') }}
+                </th>
 
-                    <th class="border px-4 py-3 text-left">
-                        Status
-                    </th>
+            </tr>
 
-                    <th class="border px-4 py-3 text-left">
-                        Count
-                    </th>
+            </thead>
 
-                </tr>
+            <tbody>
 
-                </thead>
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-6 py-4">{{ __('reports.available') }}</td>
+                <td class="px-6 py-4">{{ $availableAssets }}</td>
+            </tr>
 
-                <tbody>
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-6 py-4">{{ __('reports.assigned') }}</td>
+                <td class="px-6 py-4">{{ $assignedAssets }}</td>
+            </tr>
 
-                <tr>
-                    <td class="border px-4 py-3">
-                        Available
-                    </td>
-                    <td class="border px-4 py-3">
-                        {{ $availableAssets }}
-                    </td>
-                </tr>
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-6 py-4">{{ __('reports.maintenance') }}</td>
+                <td class="px-6 py-4">{{ $maintenanceAssets }}</td>
+            </tr>
 
-                <tr>
-                    <td class="border px-4 py-3">
-                        Assigned
-                    </td>
-                    <td class="border px-4 py-3">
-                        {{ $assignedAssets }}
-                    </td>
-                </tr>
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-6 py-4">{{ __('reports.retired') }}</td>
+                <td class="px-6 py-4">{{ $retiredAssets }}</td>
+            </tr>
 
-                <tr>
-                    <td class="border px-4 py-3">
-                        Maintenance
-                    </td>
-                    <td class="border px-4 py-3">
-                        {{ $maintenanceAssets }}
-                    </td>
-                </tr>
+            </tbody>
 
-                <tr>
-                    <td class="border px-4 py-3">
-                        Retired
-                    </td>
-                    <td class="border px-4 py-3">
-                        {{ $retiredAssets }}
-                    </td>
-                </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
+        </table>
 
     </div>
 

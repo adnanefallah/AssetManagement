@@ -1,52 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
-    <title>New Support Ticket</title>
+    <title>{{ __('emails.new_support_ticket') }}</title>
 </head>
 <body>
 
-<h2>New Support Ticket Created</h2>
+<h2>{{ __('emails.new_support_ticket_created') }}</h2>
 
-<p>Hello,</p>
+<p>{{ __('emails.hello') }},</p>
 
-<p>A new support ticket has been created.</p>
+<p>{{ __('emails.new_support_ticket_message') }}</p>
 
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>
-        <th align="left">Title</th>
+        <th align="left">{{ __('emails.title') }}</th>
         <td>{{ $ticket->title }}</td>
     </tr>
 
     <tr>
-        <th align="left">Asset</th>
+        <th align="left">{{ __('emails.asset') }}</th>
         <td>{{ $ticket->asset->asset_name }}</td>
     </tr>
 
     <tr>
-        <th align="left">Reported By</th>
+        <th align="left">{{ __('emails.reported_by') }}</th>
         <td>{{ $ticket->user->name }}</td>
     </tr>
 
     <tr>
-        <th align="left">Priority</th>
+        <th align="left">{{ __('emails.priority') }}</th>
         <td>{{ $ticket->priority }}</td>
     </tr>
 
     <tr>
-        <th align="left">Status</th>
+        <th align="left">{{ __('emails.status') }}</th>
         <td>{{ $ticket->status }}</td>
     </tr>
 
     <tr>
-        <th align="left">Description</th>
+        <th align="left">{{ __('emails.description') }}</th>
         <td>{{ $ticket->description }}</td>
     </tr>
 </table>
 
 <br>
 
-<p>Thank you.</p>
+<p>{{ __('emails.thank_you') }}</p>
 
 </body>
 </html>

@@ -1,105 +1,155 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2>Edit Assignment</h2>
-    </x-slot>
+    <div class="max-w-4xl mx-auto">
 
-    <div class="p-6">
+        <div class="mb-8">
 
-        <form action="{{ route('asset-assignments.update', $assetAssignment) }}" method="POST">
+            <h2 class="text-3xl font-bold text-gray-900">
+                {{ __('assets.edit_assignment') }}
+            </h2>
 
-            @csrf
-            @method('PUT')
+            <p class="text-gray-500 mt-1">
+                {{ __('assets.edit_assignment_description') }}
+            </p>
 
-            <div class="mb-4">
+        </div>
 
-                <label>Asset</label>
+        <div class="bg-white rounded-xl shadow border border-gray-200 p-8">
 
-                <select name="asset_id" class="border w-full p-2 rounded">
+            <form action="{{ route('asset-assignments.update', $assetAssignment) }}" method="POST">
 
-                    @foreach($assets as $asset)
+                @csrf
+                @method('PUT')
 
-                    <option value="{{ $asset->id }}"
-                            {{ $assetAssignment->asset_id == $asset->id ? 'selected' : '' }}>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                        {{ $asset->asset_name }}
+                    <div>
 
-                    </option>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.asset') }}
+                        </label>
 
-                    @endforeach
+                        <select
+                            name="asset_id"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-                </select>
+                            @foreach($assets as $asset)
 
-            </div>
+                            <option
+                                value="{{ $asset->id }}"
+                                {{ $assetAssignment->asset_id == $asset->id ? 'selected' : '' }}>
 
-            <div class="mb-4">
+                                {{ $asset->asset_name }}
 
-                <label>User</label>
+                            </option>
 
-                <select name="user_id" class="border w-full p-2 rounded">
+                            @endforeach
 
-                    @foreach($users as $user)
+                        </select>
 
-                    <option value="{{ $user->id }}"
-                            {{ $assetAssignment->user_id == $user->id ? 'selected' : '' }}>
+                    </div>
 
-                        {{ $user->name }}
+                    <div>
 
-                    </option>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.user') }}
+                        </label>
 
-                    @endforeach
+                        <select
+                            name="user_id"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-                </select>
+                            @foreach($users as $user)
 
-            </div>
+                            <option
+                                value="{{ $user->id }}"
+                                {{ $assetAssignment->user_id == $user->id ? 'selected' : '' }}>
 
-            <div class="mb-4">
-                <label>Assigned Date</label>
-                <input type="date"
-                       name="assigned_date"
-                       value="{{ old('assigned_date', $assetAssignment->assigned_date) }}"
-                       class="border w-full p-2 rounded">
-            </div>
+                                {{ $user->name }}
 
-            <div class="mb-4">
-                <label>Returned Date</label>
-                <input type="date"
-                       name="returned_date"
-                       value="{{ old('returned_date', $assetAssignment->returned_date) }}"
-                       class="border w-full p-2 rounded">
-            </div>
+                            </option>
 
-            <div class="mb-4">
+                            @endforeach
 
-                <label>Status</label>
+                        </select>
 
-                <select name="status"
-                        class="border w-full p-2 rounded">
+                    </div>
 
-                    <option {{ $assetAssignment->status == 'Assigned' ? 'selected' : '' }}>
-                        Assigned
-                    </option>
+                    <div>
 
-                    <option {{ $assetAssignment->status == 'Returned' ? 'selected' : '' }}>
-                        Returned
-                    </option>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.assigned_date') }}
+                        </label>
 
-                </select>
+                        <input
+                            type="date"
+                            name="assigned_date"
+                            value="{{ old('assigned_date', $assetAssignment->assigned_date) }}"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            </div>
+                    </div>
 
-            <button class="bg-blue-600 text-white px-4 py-2 rounded">
-                Update
-            </button>
+                    <div>
 
-            <a href="{{ route('asset-assignments.index') }}"
-               class="bg-gray-500 text-white px-4 py-2 rounded">
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.returned_date') }}
+                        </label>
 
-                Cancel
+                        <input
+                            type="date"
+                            name="returned_date"
+                            value="{{ old('returned_date', $assetAssignment->returned_date) }}"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            </a>
+                    </div>
 
-        </form>
+                    <div class="md:col-span-2">
+
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.status') }}
+                        </label>
+
+                        <select
+                            name="status"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                            <option {{ $assetAssignment->status == 'Assigned' ? 'selected' : '' }}>
+                                {{ __('assets.assigned') }}
+                            </option>
+
+                            <option {{ $assetAssignment->status == 'Returned' ? 'selected' : '' }}>
+                                {{ __('assets.returned') }}
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="flex gap-3 mt-8">
+
+                    <button
+                        type="submit"
+                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
+
+                        {{ __('assets.update_assignment') }}
+
+                    </button>
+
+                    <a
+                        href="{{ route('asset-assignments.index') }}"
+                        class="border border-gray-300 bg-white text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+
+                        {{ __('assets.cancel') }}
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 
