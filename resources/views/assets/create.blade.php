@@ -1,129 +1,214 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2>Create Asset</h2>
-    </x-slot>
+    <div class="flex items-center justify-between mb-8">
 
-    <div class="p-6">
+        <div>
 
-        <form action="{{ route('assets.store') }}" method="POST" enctype="multipart/form-data">
+            <h2 class="text-3xl font-bold text-gray-900">
+                {{ __('assets.create_title') }}
+            </h2>
+
+            <p class="text-gray-500 mt-1">
+                {{ __('assets.create_subtitle') }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-xl shadow border border-gray-200 p-8">
+
+        <form action="{{ route('assets.store') }}"
+              method="POST"
+              enctype="multipart/form-data">
 
             @csrf
 
-            <div class="mb-4">
-                <label>Asset Code</label>
-                <input type="text" name="asset_code" class="border w-full p-2 rounded">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.code') }}
+                    </label>
+
+                    <input
+                        type="text"
+                        name="asset_code"
+                        value="{{ old('asset_code') }}"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.name') }}
+                    </label>
+
+                    <input
+                        type="text"
+                        name="asset_name"
+                        value="{{ old('asset_name') }}"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.serial') }}
+                    </label>
+
+                    <input
+                        type="text"
+                        name="serial_number"
+                        value="{{ old('serial_number') }}"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.category') }}
+                    </label>
+
+                    <select
+                        name="category_id"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                        @foreach($categories as $category)
+
+                        <option value="{{ $category->id }}">
+                            {{ $category->category_name }}
+                        </option>
+
+                        @endforeach
+
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.supplier') }}
+                    </label>
+
+                    <select
+                        name="supplier_id"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                        <option value="">{{ __('assets.none') }}</option>
+
+                        @foreach($suppliers as $supplier)
+
+                        <option value="{{ $supplier->id }}">
+                            {{ $supplier->company_name }}
+                        </option>
+
+                        @endforeach
+
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.status') }}
+                    </label>
+
+                    <select
+                        name="status"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                        <option>{{ __('assets.available') }}</option>
+                        <option>{{ __('assets.assigned') }}</option>
+                        <option>{{ __('assets.maintenance') }}</option>
+                        <option>{{ __('assets.retired') }}</option>
+
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.purchase_date') }}
+                    </label>
+
+                    <input
+                        type="date"
+                        name="purchase_date"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.warranty_end') }}
+                    </label>
+
+                    <input
+                        type="date"
+                        name="warranty_end"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.purchase_price') }}
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="purchase_price"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('assets.location') }}
+                    </label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                </div>
+
             </div>
 
-            <div class="mb-4">
-                <label>Asset Name</label>
-                <input type="text" name="asset_name" class="border w-full p-2 rounded">
-            </div>
+            <div class="mt-6">
 
-            <div class="mb-4">
-                <label>Serial Number</label>
-                <input type="text" name="serial_number" class="border w-full p-2 rounded">
-            </div>
-
-            <div class="mb-4">
-                <label>Category</label>
-
-                <select name="category_id" class="border w-full p-2 rounded">
-
-                    @foreach($categories as $category)
-
-                    <option value="{{ $category->id }}">
-                        {{ $category->category_name }}
-                    </option>
-
-                    @endforeach
-
-                </select>
-
-            </div>
-
-            <div class="mb-4">
-                <label>Supplier</label>
-
-                <select name="supplier_id" class="border w-full p-2 rounded">
-
-                    <option value="">None</option>
-
-                    @foreach($suppliers as $supplier)
-
-                    <option value="{{ $supplier->id }}">
-                        {{ $supplier->company_name }}
-                    </option>
-
-                    @endforeach
-
-                </select>
-
-            </div>
-
-            <div class="mb-4">
-                <label>Purchase Date</label>
-                <input type="date" name="purchase_date" class="border w-full p-2 rounded">
-            </div>
-
-            <div class="mb-4">
-                <label>Warranty End</label>
-                <input type="date" name="warranty_end" class="border w-full p-2 rounded">
-            </div>
-
-            <div class="mb-4">
-                <label>Purchase Price</label>
-                <input type="number" step="0.01" name="purchase_price" class="border w-full p-2 rounded">
-            </div>
-
-            <div class="mb-4">
-
-                <label>Status</label>
-
-                <select name="status" class="border w-full p-2 rounded">
-
-                    <option>Available</option>
-                    <option>Assigned</option>
-                    <option>Maintenance</option>
-                    <option>Retired</option>
-
-                </select>
-
-            </div>
-
-            <div class="mb-4">
-                <label>Location</label>
-                <input type="text" name="location" class="border w-full p-2 rounded">
-            </div>
-
-            <div class="mb-4">
-                <label class="block mb-2 font-medium">
-                    Asset Image
+                <label class="block mb-2 font-medium text-gray-700">
+                    {{ __('assets.image') }}
                 </label>
 
                 <input
                     type="file"
                     name="image"
                     accept="image/*"
-                    class="border w-full p-2 rounded">
+                    class="w-full rounded-lg border border-gray-300 p-3">
 
                 @error('image')
-                <p class="text-red-500 text-sm mt-1">
+
+                <p class="text-red-500 text-sm mt-2">
                     {{ $message }}
                 </p>
+
                 @enderror
+
             </div>
 
-            <button class="bg-green-600 text-white px-4 py-2 rounded">
-                Save
-            </button>
+            <div class="flex gap-3 mt-8">
 
-            <a href="{{ route('assets.index') }}"
-               class="bg-gray-500 text-white px-4 py-2 rounded">
+                <button
+                    type="submit"
+                    class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
 
-                Cancel
+                    {{ __('assets.save') }}
 
-            </a>
+                </button>
+
+                <a
+                    href="{{ route('assets.index') }}"
+                    class="border border-gray-300 bg-white text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+
+                    {{ __('assets.cancel') }}
+
+                </a>
+
+            </div>
 
         </form>
 

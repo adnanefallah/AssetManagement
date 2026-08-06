@@ -1,84 +1,126 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2>Assign Asset</h2>
-    </x-slot>
+    <div class="max-w-4xl mx-auto">
 
-    <div class="p-6">
+        <div class="mb-8">
 
-        <form action="{{ route('asset-assignments.store') }}" method="POST">
+            <h2 class="text-3xl font-bold text-gray-900">
+                {{ __('assets.assign_asset') }}
+            </h2>
 
-            @csrf
+            <p class="text-gray-500 mt-1">
+                {{ __('assets.assign_asset_description') }}
+            </p>
 
-            <div class="mb-4">
+        </div>
 
-                <label>Asset</label>
+        <div class="bg-white rounded-xl shadow border border-gray-200 p-8">
 
-                <select name="asset_id" class="border w-full p-2 rounded">
+            <form action="{{ route('asset-assignments.store') }}" method="POST">
 
-                    @foreach($assets as $asset)
+                @csrf
 
-                    <option value="{{ $asset->id }}">
-                        {{ $asset->asset_name }}
-                    </option>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    @endforeach
+                    <div>
 
-                </select>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.asset') }}
+                        </label>
 
-            </div>
+                        <select
+                            name="asset_id"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            <div class="mb-4">
+                            @foreach($assets as $asset)
 
-                <label>User</label>
+                            <option value="{{ $asset->id }}">
+                                {{ $asset->asset_name }}
+                            </option>
 
-                <select name="user_id" class="border w-full p-2 rounded">
+                            @endforeach
 
-                    @foreach($users as $user)
+                        </select>
 
-                    <option value="{{ $user->id }}">
-                        {{ $user->name }}
-                    </option>
+                    </div>
 
-                    @endforeach
+                    <div>
 
-                </select>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.user') }}
+                        </label>
 
-            </div>
+                        <select
+                            name="user_id"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            <div class="mb-4">
-                <label>Assigned Date</label>
-                <input type="date"
-                       name="assigned_date"
-                       class="border w-full p-2 rounded">
-            </div>
+                            @foreach($users as $user)
 
-            <div class="mb-4">
+                            <option value="{{ $user->id }}">
+                                {{ $user->name }}
+                            </option>
 
-                <label>Status</label>
+                            @endforeach
 
-                <select name="status"
-                        class="border w-full p-2 rounded">
+                        </select>
 
-                    <option>Assigned</option>
-                    <option>Returned</option>
+                    </div>
 
-                </select>
+                    <div>
 
-            </div>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.assigned_date') }}
+                        </label>
 
-            <button class="bg-green-600 text-white px-4 py-2 rounded">
-                Save
-            </button>
+                        <input
+                            type="date"
+                            name="assigned_date"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            <a href="{{ route('asset-assignments.index') }}"
-               class="bg-gray-500 text-white px-4 py-2 rounded">
+                    </div>
 
-                Cancel
+                    <div>
 
-            </a>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('assets.status') }}
+                        </label>
 
-        </form>
+                        <select
+                            name="status"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                            <option>{{ __('assets.assigned') }}</option>
+                            <option>{{ __('assets.returned') }}</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="flex gap-3 mt-8">
+
+                    <button
+                        type="submit"
+                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
+
+                        {{ __('assets.assign_asset') }}
+
+                    </button>
+
+                    <a
+                        href="{{ route('asset-assignments.index') }}"
+                        class="border border-gray-300 bg-white text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+
+                        {{ __('assets.cancel') }}
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 

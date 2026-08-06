@@ -1,106 +1,170 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2>Create Ticket</h2>
-    </x-slot>
+    <div class="max-w-4xl mx-auto">
 
-    <div class="p-6">
+        <div class="mb-8">
 
-        <form action="{{ route('tickets.store') }}" method="POST">
+            <h2 class="text-3xl font-bold text-gray-900">
+                {{ __('tickets.create_ticket') }}
+            </h2>
 
-            @csrf
+            <p class="text-gray-500 mt-1">
+                {{ __('tickets.create_ticket_description') }}
+            </p>
 
-            <div class="mb-4">
+        </div>
 
-                <label>Asset</label>
+        <div class="bg-white rounded-xl shadow border border-gray-200 p-8">
 
-                <select name="asset_id" class="border w-full p-2 rounded">
+            <form action="{{ route('tickets.store') }}" method="POST">
 
-                    @foreach($assets as $asset)
+                @csrf
 
-                    <option value="{{ $asset->id }}">
-                        {{ $asset->asset_name }}
-                    </option>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    @endforeach
+                    <div>
 
-                </select>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('tickets.asset') }}
+                        </label>
 
-            </div>
+                        <select
+                            name="asset_id"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            <div class="mb-4">
+                            @foreach($assets as $asset)
 
-                <label>User</label>
+                            <option value="{{ $asset->id }}">
+                                {{ $asset->asset_name }}
+                            </option>
 
-                <select name="user_id" class="border w-full p-2 rounded">
+                            @endforeach
 
-                    @foreach($users as $user)
+                        </select>
 
-                    <option value="{{ $user->id }}">
-                        {{ $user->name }}
-                    </option>
+                    </div>
 
-                    @endforeach
+                    @if(auth()->user()->isUser())
 
-                </select>
+                    <input
+                        type="hidden"
+                        name="user_id"
+                        value="{{ auth()->id() }}">
 
-            </div>
+                    @else
 
-            <div class="mb-4">
-                <label>Title</label>
-                <input type="text"
-                       name="title"
-                       class="border w-full p-2 rounded">
-            </div>
+                    <div>
 
-            <div class="mb-4">
-                <label>Description</label>
-                <textarea name="description"
-                          class="border w-full p-2 rounded"></textarea>
-            </div>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('tickets.user') }}
+                        </label>
 
-            <div class="mb-4">
+                        <select
+                            name="user_id"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-                <label>Priority</label>
+                            @foreach($users as $user)
 
-                <select name="priority"
-                        class="border w-full p-2 rounded">
+                            <option value="{{ $user->id }}">
+                                {{ $user->name }}
+                            </option>
 
-                    <option>Low</option>
-                    <option selected>Medium</option>
-                    <option>High</option>
+                            @endforeach
 
-                </select>
+                        </select>
 
-            </div>
+                    </div>
 
-            <div class="mb-4">
+                    @endif
 
-                <label>Status</label>
+                    <div>
 
-                <select name="status"
-                        class="border w-full p-2 rounded">
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('tickets.title_label') }}
+                        </label>
 
-                    <option selected>Open</option>
-                    <option>In Progress</option>
-                    <option>Closed</option>
+                        <input
+                            type="text"
+                            name="title"
+                            value="{{ old('title') }}"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-                </select>
+                    </div>
 
-            </div>
+                    <div>
 
-            <button class="bg-green-600 text-white px-4 py-2 rounded">
-                Save
-            </button>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('tickets.priority') }}
+                        </label>
 
-            <a href="{{ route('tickets.index') }}"
-               class="bg-gray-500 text-white px-4 py-2 rounded">
+                        <select
+                            name="priority"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-                Cancel
+                            <option>{{ __('tickets.low') }}</option>
+                            <option selected>{{ __('tickets.medium') }}</option>
+                            <option>{{ __('tickets.high') }}</option>
 
-            </a>
+                        </select>
 
-        </form>
+                    </div>
+
+                    <div class="md:col-span-2">
+
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('tickets.status') }}
+                        </label>
+
+                        <select
+                            name="status"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                            <option selected>{{ __('tickets.open') }}</option>
+                            <option>{{ __('tickets.in_progress') }}</option>
+                            <option>{{ __('tickets.closed') }}</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="mt-6">
+
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('tickets.description') }}
+                    </label>
+
+                    <textarea
+                        name="description"
+                        rows="4"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">{{ old('description') }}</textarea>
+
+                </div>
+
+                <div class="flex gap-3 mt-8">
+
+                    <button
+                        type="submit"
+                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
+
+                        {{ __('tickets.save_ticket') }}
+
+                    </button>
+
+                    <a
+                        href="{{ route('tickets.index') }}"
+                        class="border border-gray-300 bg-white text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+
+                        {{ __('tickets.cancel') }}
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 

@@ -1,84 +1,122 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2>Categories</h2>
-    </x-slot>
+    <div class="flex items-center justify-between mb-8">
 
-    <div class="p-6">
+        <h2 class="text-3xl font-bold text-gray-900">
+            {{ __('categories.title') }}
+        </h2>
 
         <a href="{{ route('categories.create') }}"
-           class="bg-blue-500 text-white px-4 py-2 rounded">
-            + Add Category
+           class="bg-black text-white px-5 py-2.5 rounded-lg hover:bg-gray-800 transition">
+
+            + {{ __('categories.add') }}
+
         </a>
 
-        <table class="table-auto w-full mt-5 border">
+    </div>
 
-            <thead class="bg-gray-200">
+    <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+
+        <table class="w-full">
+
+            <thead class="bg-gray-100">
+
             <tr>
-                <th class="border px-3 py-2">ID</th>
-                <th class="border px-3 py-2">Category Name</th>
-                <th class="border px-3 py-2">Description</th>
-                <th class="border px-3 py-2">Actions</th>
+
+                <th class="text-left px-6 py-4 font-semibold">
+                    {{ __('categories.id') }}
+                </th>
+
+                <th class="text-left px-6 py-4 font-semibold">
+                    {{ __('categories.category_name') }}
+                </th>
+
+                <th class="text-left px-6 py-4 font-semibold">
+                    {{ __('categories.description') }}
+                </th>
+
+                <th class="text-center px-6 py-4 font-semibold">
+                    {{ __('categories.actions') }}
+                </th>
+
             </tr>
+
             </thead>
 
             <tbody>
 
-            @foreach($categories as $category)
+            @forelse($categories as $category)
 
-            <tr>
+            <tr class="border-t hover:bg-gray-50">
 
-                <td class="border px-3 py-2">
+                <td class="px-6 py-4">
                     {{ $category->id }}
                 </td>
 
-                <td class="border px-3 py-2">
+                <td class="px-6 py-4 font-medium">
                     {{ $category->category_name }}
                 </td>
 
-                <td class="border px-3 py-2">
-                    {{ $category->description }}
+                <td class="px-6 py-4">
+                    {{ $category->description ?: '-' }}
                 </td>
 
-                <td class="border px-3 py-2">
+                <td class="px-6 py-4">
 
-                    <a href="{{ route('categories.edit',$category) }}"
-                       class="bg-yellow-500 text-white px-3 py-1 rounded">
-                        Edit
-                    </a>
+                    <div class="flex justify-center gap-3">
 
-                    <form
-                        action="{{ route('categories.destroy',$category) }}"
-                        method="POST"
-                        style="display:inline;">
+                        <a href="{{ route('categories.edit', $category) }}"
+                           class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
 
-                        @csrf
-                        @method('DELETE')
+                            {{ __('categories.edit') }}
 
-                        <button
-                            class="bg-red-600 text-white px-3 py-1 rounded"
-                            onclick="return confirm('Delete this category?')">
+                        </a>
 
-                            Delete
+                        <form action="{{ route('categories.destroy', $category) }}"
+                              method="POST"
+                              onsubmit="return confirm('{{ __('categories.confirm_delete') }}')">
 
-                        </button>
+                            @csrf
+                            @method('DELETE')
 
-                    </form>
+                            <button
+                                type="submit"
+                                class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+
+                                {{ __('categories.delete') }}
+
+                            </button>
+
+                        </form>
+
+                    </div>
 
                 </td>
 
             </tr>
 
-            @endforeach
+            @empty
+
+            <tr>
+
+                <td colspan="4" class="text-center py-8 text-gray-500">
+
+                    {{ __('categories.empty') }}
+
+                </td>
+
+            </tr>
+
+            @endforelse
 
             </tbody>
 
         </table>
 
-        <div class="mt-5">
-            {{ $categories->links() }}
-        </div>
+    </div>
 
+    <div class="mt-6">
+        {{ $categories->links() }}
     </div>
 
 </x-app-layout>

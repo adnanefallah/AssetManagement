@@ -1,130 +1,136 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Activity Logs
+    <div class="mb-8">
+
+        <h2 class="text-3xl font-bold text-gray-900">
+            {{ __('activity_logs.title') }}
         </h2>
-    </x-slot>
 
-    <div class="p-6">
+        <p class="text-gray-500 mt-1">
+            {{ __('activity_logs.subtitle') }}
+        </p>
 
-        @if(session('success'))
-        <div class="mb-4 rounded bg-green-100 border border-green-400 px-4 py-3 text-green-700">
-            {{ session('success') }}
-        </div>
-        @endif
+    </div>
 
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+    @if(session('success'))
 
-            <table class="w-full border-collapse">
+    <div class="mb-6 rounded-lg bg-green-100 border border-green-300 text-green-700 px-4 py-3">
 
-                <thead class="bg-gray-200">
+        {{ session('success') }}
 
-                <tr>
+    </div>
 
-                    <th class="border px-4 py-2 text-left">
-                        User
-                    </th>
+    @endif
 
-                    <th class="border px-4 py-2 text-left">
-                        Action
-                    </th>
+    <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
 
-                    <th class="border px-4 py-2 text-left">
-                        Module
-                    </th>
+        <table class="w-full">
 
-                    <th class="border px-4 py-2 text-left">
-                        Description
-                    </th>
+            <thead class="bg-gray-100">
 
-                    <th class="border px-4 py-2 text-left">
-                        Date & Time
-                    </th>
+            <tr>
 
-                </tr>
+                <th class="px-6 py-4 text-left font-semibold">
+                    {{ __('activity_logs.user') }}
+                </th>
 
-                </thead>
+                <th class="px-6 py-4 text-left font-semibold">
+                    {{ __('activity_logs.action') }}
+                </th>
 
-                <tbody>
+                <th class="px-6 py-4 text-left font-semibold">
+                    {{ __('activity_logs.module') }}
+                </th>
 
-                @forelse($logs as $log)
+                <th class="px-6 py-4 text-left font-semibold">
+                    {{ __('activity_logs.description') }}
+                </th>
 
-                <tr class="hover:bg-gray-50">
+                <th class="px-6 py-4 text-left font-semibold">
+                    {{ __('activity_logs.date_time') }}
+                </th>
 
-                    <td class="border px-4 py-2">
-                        {{ $log->user?->name ?? 'System' }}
-                    </td>
+            </tr>
 
-                    <td class="border px-4 py-2">
+            </thead>
 
-                        @if($log->action == 'Create')
+            <tbody>
 
-                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">
-                                        {{ $log->action }}
-                                    </span>
+            @forelse($logs as $log)
 
-                        @elseif($log->action == 'Update')
+            <tr class="border-t hover:bg-gray-50">
 
-                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-sm">
-                                        {{ $log->action }}
-                                    </span>
+                <td class="px-6 py-4">
+                    {{ $log->user?->name ?? __('activity_logs.system') }}
+                </td>
 
-                        @elseif($log->action == 'Delete')
+                <td class="px-6 py-4">
 
-                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm">
-                                        {{ $log->action }}
-                                    </span>
+                    @if($log->action == 'Create')
 
-                        @else
+                    <span class="inline-flex rounded-full bg-green-100 text-green-700 px-3 py-1 text-sm font-medium">
+                                {{ __('activity_logs.create') }}
+                            </span>
 
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-sm">
-                                        {{ $log->action }}
-                                    </span>
+                    @elseif($log->action == 'Update')
 
-                        @endif
+                    <span class="inline-flex rounded-full bg-yellow-100 text-yellow-700 px-3 py-1 text-sm font-medium">
+                                {{ __('activity_logs.update') }}
+                            </span>
 
-                    </td>
+                    @elseif($log->action == 'Delete')
 
-                    <td class="border px-4 py-2">
-                        {{ $log->module }}
-                    </td>
+                    <span class="inline-flex rounded-full bg-red-100 text-red-700 px-3 py-1 text-sm font-medium">
+                                {{ __('activity_logs.delete') }}
+                            </span>
 
-                    <td class="border px-4 py-2">
-                        {{ $log->description }}
-                    </td>
+                    @else
 
-                    <td class="border px-4 py-2">
-                        {{ $log->created_at->format('d/m/Y H:i:s') }}
-                    </td>
+                    <span class="inline-flex rounded-full bg-gray-100 text-gray-700 px-3 py-1 text-sm font-medium">
+                                {{ $log->action }}
+                            </span>
 
-                </tr>
+                    @endif
 
-                @empty
+                </td>
 
-                <tr>
+                <td class="px-6 py-4">
+                    {{ $log->module }}
+                </td>
 
-                    <td colspan="5" class="border px-4 py-6 text-center text-gray-500">
+                <td class="px-6 py-4">
+                    {{ $log->description }}
+                </td>
 
-                        No activity logs found.
+                <td class="px-6 py-4">
+                    {{ $log->created_at->format('d/m/Y H:i:s') }}
+                </td>
 
-                    </td>
+            </tr>
 
-                </tr>
+            @empty
 
-                @endforelse
+            <tr>
 
-                </tbody>
+                <td colspan="5" class="px-6 py-10 text-center text-gray-500">
 
-            </table>
+                    {{ __('activity_logs.no_logs') }}
 
-        </div>
+                </td>
 
-        <div class="mt-6">
+            </tr>
 
-            {{ $logs->links() }}
+            @endforelse
 
-        </div>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="mt-6">
+
+        {{ $logs->links() }}
 
     </div>
 

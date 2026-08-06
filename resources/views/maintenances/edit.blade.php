@@ -1,92 +1,161 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2>Edit Maintenance</h2>
-    </x-slot>
+    <div class="max-w-4xl mx-auto">
 
-    <div class="p-6">
+        <div class="mb-8">
 
-        <form action="{{ route('maintenances.update',$maintenance) }}" method="POST">
+            <h2 class="text-3xl font-bold text-gray-900">
+                {{ __('maintenances.edit_maintenance') }}
+            </h2>
 
-            @csrf
-            @method('PUT')
+            <p class="text-gray-500 mt-1">
+                {{ __('maintenances.edit_description') }}
+            </p>
 
-            <label>Asset</label>
+        </div>
 
-            <select name="asset_id" class="border w-full p-2 rounded mb-4">
+        <div class="bg-white rounded-xl shadow border border-gray-200 p-8">
 
-                @foreach($assets as $asset)
+            <form action="{{ route('maintenances.update', $maintenance) }}" method="POST">
 
-                <option value="{{ $asset->id }}"
-                        {{ $maintenance->asset_id==$asset->id ? 'selected' : '' }}>
+                @csrf
+                @method('PUT')
 
-                    {{ $asset->asset_name }}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                </option>
+                    <div>
 
-                @endforeach
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('maintenances.asset') }}
+                        </label>
 
-            </select>
+                        <select
+                            name="asset_id"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            <label>Title</label>
+                            @foreach($assets as $asset)
 
-            <input
-                type="text"
-                name="title"
-                value="{{ $maintenance->title }}"
-                class="border w-full p-2 rounded mb-4">
+                            <option
+                                value="{{ $asset->id }}"
+                                {{ $maintenance->asset_id == $asset->id ? 'selected' : '' }}>
 
-            <label>Description</label>
+                                {{ $asset->asset_name }}
 
-            <textarea
-                name="description"
-                class="border w-full p-2 rounded mb-4">{{ $maintenance->description }}</textarea>
+                            </option>
 
-            <label>Date</label>
+                            @endforeach
 
-            <input
-                type="date"
-                name="maintenance_date"
-                value="{{ $maintenance->maintenance_date }}"
-                class="border w-full p-2 rounded mb-4">
+                        </select>
 
-            <label>Cost</label>
+                    </div>
 
-            <input
-                type="number"
-                step="0.01"
-                name="cost"
-                value="{{ $maintenance->cost }}"
-                class="border w-full p-2 rounded mb-4">
+                    <div>
 
-            <label>Status</label>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('maintenances.title_label') }}
+                        </label>
 
-            <select
-                name="status"
-                class="border w-full p-2 rounded mb-4">
+                        <input
+                            type="text"
+                            name="title"
+                            value="{{ old('title', $maintenance->title) }}"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-                <option {{ $maintenance->status=='Pending' ? 'selected' : '' }}>
-                    Pending
-                </option>
+                    </div>
 
-                <option {{ $maintenance->status=='In Progress' ? 'selected' : '' }}>
-                    In Progress
-                </option>
+                    <div>
 
-                <option {{ $maintenance->status=='Completed' ? 'selected' : '' }}>
-                    Completed
-                </option>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('maintenances.maintenance_date') }}
+                        </label>
 
-            </select>
+                        <input
+                            type="date"
+                            name="maintenance_date"
+                            value="{{ old('maintenance_date', $maintenance->maintenance_date) }}"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
 
-            <button
-                class="bg-blue-600 text-white px-4 py-2 rounded">
+                    </div>
 
-                Update
+                    <div>
 
-            </button>
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('maintenances.cost') }}
+                        </label>
 
-        </form>
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="cost"
+                            value="{{ old('cost', $maintenance->cost) }}"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                    </div>
+
+                    <div class="md:col-span-2">
+
+                        <label class="block mb-2 font-medium text-gray-700">
+                            {{ __('maintenances.status') }}
+                        </label>
+
+                        <select
+                            name="status"
+                            class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+
+                            <option {{ $maintenance->status == 'Pending' ? 'selected' : '' }}>
+                                {{ __('maintenances.pending') }}
+                            </option>
+
+                            <option {{ $maintenance->status == 'In Progress' ? 'selected' : '' }}>
+                                {{ __('maintenances.in_progress') }}
+                            </option>
+
+                            <option {{ $maintenance->status == 'Completed' ? 'selected' : '' }}>
+                                {{ __('maintenances.completed') }}
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="mt-6">
+
+                    <label class="block mb-2 font-medium text-gray-700">
+                        {{ __('maintenances.description') }}
+                    </label>
+
+                    <textarea
+                        name="description"
+                        rows="4"
+                        class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">{{ old('description', $maintenance->description) }}</textarea>
+
+                </div>
+
+                <div class="flex gap-3 mt-8">
+
+                    <button
+                        type="submit"
+                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
+
+                        {{ __('maintenances.update_maintenance') }}
+
+                    </button>
+
+                    <a
+                        href="{{ route('maintenances.index') }}"
+                        class="border border-gray-300 bg-white text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+
+                        {{ __('maintenances.cancel') }}
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 

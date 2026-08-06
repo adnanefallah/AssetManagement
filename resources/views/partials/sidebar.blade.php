@@ -1,65 +1,124 @@
-<div class="w-64 min-h-screen bg-dark text-white position-fixed">
+<aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
 
-    <div class="p-4 border-bottom">
-        <h4 class="fw-bold">Asset Management</h4>
+    {{-- Logo --}}
+    <div class="h-16 flex items-center px-6 border-b border-gray-200">
+
+        <h2 class="text-lg font-bold text-gray-900">
+            {{ __('sidebar.menu') }}
+        </h2>
+
     </div>
 
-    <ul class="nav flex-column p-3">
+    {{-- Navigation --}}
+    <nav class="flex-1 p-4 space-y-2">
 
-        <li class="nav-item mb-2">
-            <a href="{{ route('dashboard') }}" class="nav-link text-white">
-                📊 Dashboard
-            </a>
-        </li>
+        {{-- Dashboard (Everyone) --}}
+        <a href="{{ route('dashboard') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.dashboard') }}
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="{{ route('departments.index') }}" class="nav-link text-white">
-                🏢 Departments
-            </a>
-        </li>
+        {{-- ================================================= --}}
+        {{-- Administrator --}}
+        {{-- ================================================= --}}
+        @if(auth()->user()->isAdmin())
 
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white">
-                📂 Categories
-            </a>
-        </li>
+        <a href="{{ route('users.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('users.title') }}
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white">
-                🚚 Suppliers
-            </a>
-        </li>
+        <a href="{{ route('assets.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.assets') }}
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white">
-                💻 Assets
-            </a>
-        </li>
+        <a href="{{ route('categories.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.categories') }}
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white">
-                🔄 Assignments
-            </a>
-        </li>
+        <a href="{{ route('suppliers.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.suppliers') }}
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white">
-                🎫 Tickets
-            </a>
-        </li>
+        <a href="{{ route('departments.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.departments') }}
+        </a>
 
-        <hr>
+        <a href="{{ route('asset-assignments.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.assignments') }}
+        </a>
 
-        <li class="nav-item">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
+        <a href="{{ route('maintenances.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.maintenance') }}
+        </a>
 
-                <button class="btn btn-danger w-100">
-                    Logout
-                </button>
-            </form>
-        </li>
+        <a href="{{ route('tickets.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.tickets') }}
+        </a>
 
-    </ul>
+        <a href="{{ route('reports.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.reports') }}
+        </a>
 
-</div>
+        <a href="{{ route('activity-logs.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.activity_logs') }}
+        </a>
+
+        @endif
+
+        {{-- ================================================= --}}
+        {{-- Technician --}}
+        {{-- ================================================= --}}
+        @if(auth()->user()->isTechnician())
+
+        <a href="{{ route('assets.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.assets') }}
+        </a>
+
+        <a href="{{ route('asset-assignments.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.assignments') }}
+        </a>
+
+        <a href="{{ route('maintenances.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.maintenance') }}
+        </a>
+
+        <a href="{{ route('tickets.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.tickets') }}
+        </a>
+
+        @endif
+
+        {{-- ================================================= --}}
+        {{-- User --}}
+        {{-- ================================================= --}}
+        @if(auth()->user()->isUser())
+
+        <a href="{{ route('assets.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.assets') }}
+        </a>
+
+        <a href="{{ route('tickets.index') }}"
+           class="block rounded-lg px-4 py-2 hover:bg-gray-100">
+            {{ __('sidebar.tickets') }}
+        </a>
+
+        @endif
+
+    </nav>
+
+</aside>

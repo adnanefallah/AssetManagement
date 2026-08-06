@@ -1,31 +1,63 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Asset History
-        </h2>
-    </x-slot>
+    <div class="max-w-6xl mx-auto">
 
-    <div class="p-6">
+        <div class="flex items-center justify-between mb-8">
 
-        <div class="bg-white rounded shadow p-6">
+            <div>
 
-            <h3 class="text-lg font-bold mb-2">
+                <h2 class="text-3xl font-bold text-gray-900">
+                    {{ __('history.title') }}
+                </h2>
+
+                <p class="text-gray-500 mt-1">
+                    {{ __('history.subtitle') }}
+                </p>
+
+            </div>
+
+            <a
+                href="{{ route('assets.index') }}"
+                class="border border-gray-300 bg-white text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-100 transition">
+
+                {{ __('history.back_to_assets') }}
+
+            </a>
+
+        </div>
+
+        <div class="bg-white rounded-xl shadow border border-gray-200 p-6 mb-6">
+
+            <h3 class="text-2xl font-semibold text-gray-900">
                 {{ $asset->asset_name }}
             </h3>
 
-            <p class="text-gray-600 mb-6">
-                Code: {{ $asset->asset_code }}
+            <p class="text-gray-500 mt-2">
+                {{ __('history.asset_code') }}: <span class="font-medium">{{ $asset->asset_code }}</span>
             </p>
 
-            <table class="w-full border">
+        </div>
 
-                <thead class="bg-gray-200">
+        <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+
+            <table class="w-full">
+
+                <thead class="bg-gray-100">
 
                 <tr>
-                    <th class="border px-4 py-2">Date</th>
-                    <th class="border px-4 py-2">Action</th>
-                    <th class="border px-4 py-2">Description</th>
+
+                    <th class="px-6 py-4 text-left font-semibold">
+                        {{ __('history.date') }}
+                    </th>
+
+                    <th class="px-6 py-4 text-left font-semibold">
+                        {{ __('history.action') }}
+                    </th>
+
+                    <th class="px-6 py-4 text-left font-semibold">
+                        {{ __('history.description') }}
+                    </th>
+
                 </tr>
 
                 </thead>
@@ -34,17 +66,23 @@
 
                 @forelse($histories as $history)
 
-                <tr>
+                <tr class="border-t hover:bg-gray-50">
 
-                    <td class="border px-4 py-2">
-                        {{ $history->created_at->format('d/m/Y H:i') }}
+                    <td class="px-6 py-4">
+                        {{ $history->created_at->format('d M Y - H:i') }}
                     </td>
 
-                    <td class="border px-4 py-2">
-                        {{ $history->action }}
+                    <td class="px-6 py-4">
+
+                            <span class="inline-flex rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+
+                                {{ $history->action }}
+
+                            </span>
+
                     </td>
 
-                    <td class="border px-4 py-2">
+                    <td class="px-6 py-4 text-gray-700">
                         {{ $history->description }}
                     </td>
 
@@ -53,9 +91,15 @@
                 @empty
 
                 <tr>
-                    <td colspan="3" class="text-center py-6">
-                        No history available.
+
+                    <td
+                        colspan="3"
+                        class="px-6 py-10 text-center text-gray-500">
+
+                        {{ __('history.no_history') }}
+
                     </td>
+
                 </tr>
 
                 @endforelse
@@ -63,18 +107,6 @@
                 </tbody>
 
             </table>
-
-            <div class="mt-6">
-
-                <a
-                    href="{{ route('assets.index') }}"
-                    class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
-
-                    Back
-
-                </a>
-
-            </div>
 
         </div>
 
